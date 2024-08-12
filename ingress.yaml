@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: name-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "7200"
+    nginx.ingress.kubernetes.io/proxy_read_timeout: "9200"
+    nginx.ingress.kubernetes.io/client-max-body-size: "5000m"
+    nginx.ingress.kubernetes.io/client-body-buffer-size: 1000M
+    
+spec:
+  tls:
+    - hosts:
+      - www.example.com
+      # secretName: scrt-api
+  rules:
+  - host: www.example.com
+    http:
+      paths:
+      - path: /(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: nameof service
+            port: 
+              number: 80
